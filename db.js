@@ -50,6 +50,7 @@ function publicUrl(path) {
 const useSupabase = !!supabase;
 
 /* ===== DB API ===== */
+function checkErr(r) { if (r.error) throw new Error(r.error.message); return r; }
 const db = {
   /* ===================== Users ===================== */
   async getUserByNickname(nickname) {
@@ -87,7 +88,7 @@ const db = {
       created_at: new Date().toISOString()
     };
     if (useSupabase) {
-      await supabase.from('users').insert(user);
+      checkErr(await supabase.from('users').insert(user));
       return { ...user, is_creator: isCreator ? 1 : 0 };
     }
     store.users.push(user);
@@ -97,7 +98,7 @@ const db = {
 
   async updateUserNickname(id, nickname) {
     if (useSupabase) {
-      await supabase.from('users').update({ nickname }).eq('id', id);
+      checkErr(await supabase.from('users').update({ nickname }).eq('id', id));
       return true;
     }
     const user = store.users.find(u => u.id === id);
@@ -108,7 +109,7 @@ const db = {
   async updateUserProfilePhoto(id, filename) {
     if (useSupabase) {
       // filename is full storage path like profiles/file
-      await supabase.from('users').update({ profile_photo: filename }).eq('id', id);
+      checkErr(await supabase.from('users').update({ profile_photo: filename }).eq('id', id));
       return true;
     }
     const user = store.users.find(u => u.id === id);
@@ -144,10 +145,10 @@ const db = {
 
   async setAnniversary(spaceId, date) {
     if (useSupabase) {
-      await supabase.from('couple_settings').upsert(
+      checkErr(await supabase.from('couple_settings').upsert(
         { space_id: spaceId, anniversary: date },
         { onConflict: 'space_id' }
-      );
+      ));
       return { anniversary: date };
     }
     if (!store.couple_settings[spaceId]) store.couple_settings[spaceId] = {};
@@ -158,10 +159,10 @@ const db = {
 
   async setWheelOptions(spaceId, options) {
     if (useSupabase) {
-      await supabase.from('couple_settings').upsert(
+      checkErr(await supabase.from('couple_settings').upsert(
         { space_id: spaceId, wheel_options: options },
         { onConflict: 'space_id' }
-      );
+      ));
       return { wheelOptions: options };
     }
     if (!store.couple_settings[spaceId]) store.couple_settings[spaceId] = {};
@@ -201,7 +202,7 @@ const db = {
       created_at: new Date().toISOString()
     };
     if (useSupabase) {
-      await supabase.from('events').insert(event);
+      checkErr(await supabase.from('events').insert(event));
       return event;
     }
     store.events.push(event);
@@ -265,7 +266,7 @@ const db = {
       created_at: new Date().toISOString()
     };
     if (useSupabase) {
-      await supabase.from('media').insert(media);
+      checkErr(await supabase.from('media').insert(media));
       return media;
     }
     store.media.push(media);
@@ -396,7 +397,7 @@ const db = {
       created_at: new Date().toISOString()
     };
     if (useSupabase) {
-      await supabase.from('love_notes').insert(note);
+      checkErr(await supabase.from('love_notes').insert(note));
       return note;
     }
     store.love_notes.push(note);
@@ -453,7 +454,7 @@ const db = {
       created_by: data.createdBy
     };
     if (useSupabase) {
-      await supabase.from('date_checklist').insert(item);
+      checkErr(await supabase.from('date_checklist').insert(item));
       return item;
     }
     if (!store.date_checklist) store.date_checklist = [];
