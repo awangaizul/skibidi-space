@@ -1,0 +1,13 @@
+{
+  "name": "Skibidi Space",
+  "short_name": "Skibidi Space",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f2f7e8",
+  "theme_color": "#386641",
+  "orientation": "portrait-primary",
+  "scope": ".",
+  "icons": [
+    { "src": "foto.jpg", "sizes": "512x512", "type": "image/jpeg" }
+  ]
+}

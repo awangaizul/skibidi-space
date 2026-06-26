@@ -1,0 +1,20 @@
+{
+  "name": "skibidi-space",
+  "version": "2.0.0",
+  "description": "Private space for two",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "vercel-build": "npm install",
+    "setup": "npm install",
+    "build": "echo 'no build required'"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.108.2",
+    "bcryptjs": "^2.4.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^9.0.1"
+  }
+}
