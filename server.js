@@ -391,12 +391,22 @@ app.delete('/api/dates/:id', auth, asyncHandler(async (req, res) => {
 
 /* ===== Debug ===== */
 app.get('/api/debug', asyncHandler(async (req, res) => {
+  let tableOk = false, tableError = null;
+  try {
+    if (supabase) {
+      const { error } = await supabase.from('users').select('id').limit(1);
+      tableOk = !error;
+      tableError = error?.message;
+    }
+  } catch (e) { tableError = e.message; }
   res.json({
     supabaseConnected: !!supabase,
     hasUrl: !!process.env.SUPABASE_URL,
     hasKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
     hasBucket: !!process.env.SUPABASE_STORAGE_BUCKET,
-    hasJwt: !!process.env.JWT_SECRET
+    hasJwt: !!process.env.JWT_SECRET,
+    tableAccess: tableOk,
+    tableError
   });
 }));
 
