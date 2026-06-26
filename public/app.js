@@ -182,6 +182,7 @@ const App = {
   getPhotoUrl(filename) {
     if (!filename) return '';
     if (filename.startsWith('http://') || filename.startsWith('https://')) return filename;
+    if (filename.startsWith('/uploads/')) return filename;
     return '/uploads/profiles/' + filename;
   },
 
@@ -1169,7 +1170,23 @@ const App = {
   toggleLoveNote(el) {
     const card = el.closest('.love-note-card');
     if (!card) return;
-    card.classList.toggle('open');
+    const body = card.querySelector('.love-note-body');
+    if (!body) return;
+    const isOpen = card.classList.contains('open');
+
+    if (isOpen) {
+      body.style.maxHeight = body.scrollHeight + 'px';
+      body.offsetHeight; // force reflow
+      card.classList.remove('open');
+      body.style.maxHeight = '0';
+    } else {
+      card.classList.add('open');
+      body.style.maxHeight = body.scrollHeight + 'px';
+      body.addEventListener('transitionend', function handler() {
+        body.style.maxHeight = '';
+        body.removeEventListener('transitionend', handler);
+      });
+    }
   },
 
   updateLoveNoteCountdowns() {

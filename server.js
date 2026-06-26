@@ -73,6 +73,7 @@ async function deleteFromStorage(filename) {
 // Serve static files in local dev only
 if (!process.env.VERCEL) {
   app.use(express.static('public'));
+  app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 }
 
 /* ===== Auth ===== */
