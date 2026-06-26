@@ -29,10 +29,13 @@ const local = {
     if (!data.date_checklist) data.date_checklist = [];
     return data;
   },
-  save(d) { fs.writeFileSync(DB_PATH, JSON.stringify(d, null, 2)); }
+  save(d) { try { fs.writeFileSync(DB_PATH, JSON.stringify(d, null, 2)); } catch {} }
 };
 
-const store = local.init();
+const store = (() => {
+  try { return local.init(); }
+  catch { return { users: [], events: [], media: [], love_notes: [], date_checklist: [], couple_settings: {} }; }
+})();
 
 /* ===== Public URL helper ===== */
 function publicUrl(path) {
