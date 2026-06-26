@@ -389,6 +389,17 @@ app.delete('/api/dates/:id', auth, asyncHandler(async (req, res) => {
   res.json({ ok: true });
 }));
 
+/* ===== Debug ===== */
+app.get('/api/debug', asyncHandler(async (req, res) => {
+  res.json({
+    supabaseConnected: !!supabase,
+    hasUrl: !!process.env.SUPABASE_URL,
+    hasKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+    hasBucket: !!process.env.SUPABASE_STORAGE_BUCKET,
+    hasJwt: !!process.env.JWT_SECRET
+  });
+}));
+
 /* ===== Export for Vercel ===== */
 module.exports = app;
 
