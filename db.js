@@ -54,10 +54,10 @@ const db = {
   /* ===================== Users ===================== */
   async getUserByNickname(nickname) {
     if (useSupabase) {
-      const { data } = await supabase.from('users').select('*').eq('nickname', nickname).single();
+      const { data } = await supabase.from('users').select('*').ilike('nickname', nickname).maybeSingle();
       return data || null;
     }
-    return store.users.find(u => u.nickname === nickname) || null;
+    return store.users.find(u => u.nickname.toLowerCase() === nickname.toLowerCase()) || null;
   },
 
   async getUserById(id) {
